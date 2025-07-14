@@ -1,0 +1,42 @@
+# Form Definitions for Mail Server
+
+This file provides a breakdown of the forms used on the website and their respective parameters. This guide should be used for backend mail server implementation.
+
+---
+
+## 1. Contact Form (`contact.html`)
+
+This form is for general inquiries.
+
+### Parameters:
+- `name`: (string) The full name of the person submitting the form.
+- `email`: (string) The email address of the person.
+- `subject`: (string) The subject of the message.
+- `message`: (string) The message content.
+
+---
+
+## 2. Application Form (`application-form.html`)
+
+This form is for student applications.
+
+### Parameters:
+- `firstname`: (string) The child's first name.
+- `lastname`: (string) The child's last name.
+- `program`: (string) The selected program type.
+- `parent-name`: (string) The parent's full name.
+- `number`: (string) The parent's contact number.
+- `email`: (string) The parent's email address.
+- `address`: (string) The home address.
+- `dob`: (date) The child's date of birth.
+- `gender`: (string) The child's gender.
+- `agree`: (boolean) Agreement to terms and conditions.
+
+---
+
+## 3. Newsletter Subscription Form (Footer)
+
+This form is for newsletter subscriptions and is located in the footer of all pages.
+
+### Parameters:
+- `newsletter_email`: (string) The email address for the newsletter subscription.
