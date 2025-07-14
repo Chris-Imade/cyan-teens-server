@@ -1,5 +1,7 @@
 # Node.js Mail Server with Nodemailer and MongoDB
 
+- BASE_URL: https://cyan-teens-server.onrender.com
+
 This project sets up a backend mail server using Node.js, Express, Nodemailer, and MongoDB. It handles form submissions from a frontend, stores the data in a MongoDB database, and sends confirmation emails using modern HTML templates.
 
 ## Table of Contents
