@@ -246,25 +246,6 @@ app.post('/waitlist', async (req, res) => {
     await transporter.sendMail(mailOptions);
     console.log('Confirmation email sent to recipient successfully.');
 
-    // Send admin notification email
-    console.log('Attempting to send admin notification email...');
-    const adminEmailBody = `
-      <p>New Waitlist Submission for Cyan Open University of Technology:</p>
-      <ul>
-        <li><strong>Full Name:</strong> ${fullname}</li>
-        <li><strong>Email:</strong> ${email}</li>
-        <li><strong>Submitted At:</strong> ${new Date().toLocaleString()}</li>
-      </ul>
-    `;
-    const mailOptionsAdmin = {
-      from: process.env.SMTP_USER,
-      to: process.env.ADMIN_EMAIL,
-      subject: `ADMIN: New Waitlist Submission - ${fullname}`,
-      html: getEmailTemplate(adminEmailBody),
-    };
-    await transporter.sendMail(mailOptionsAdmin);
-    console.log('Admin notification email sent successfully.');
-
     res.status(200).send('Waitlist submission successful and confirmation email sent!');
   } catch (error) {
     console.error('Error processing waitlist submission:', error);
