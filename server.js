@@ -252,7 +252,15 @@ app.post('/waitlist', async (req, res) => {
     res.status(200).send('Waitlist submission successful and confirmation email sent!');
   } catch (error) {
     console.error('Error processing waitlist submission:', error);
-    res.status(500).send('Error submitting to waitlist or sending email.');
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    res.status(500).json({ 
+      error: 'Error submitting to waitlist or sending email.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
