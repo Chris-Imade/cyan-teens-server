@@ -183,73 +183,26 @@ app.post('/waitlist', async (req, res) => {
 
     // Save to database
     console.log('Attempting to save waitlist submission to database...');
-    const newWaitlist = new Waitlist({
-      fullname,
-      email,
+    
+    if (mongoose.connection.readyState === 1) {
+      const newWaitlist = new Waitlist({
+        fullname,
+        email,
+      });
+      await newWaitlist.save();
+      console.log('Waitlist submission saved to database.');
+    } else {
+      console.warn('MongoDB not connected. Skipping database save.');
+    }
+
+    res.status(200).json({ 
+      success: true,
+      message: 'Waitlist submission successful!',
+      data: {
+        fullname,
+        email
+      }
     });
-    await newWaitlist.save();
-    console.log('Waitlist submission saved to database.');
-
-    // Send confirmation email to recipient
-    console.log('Attempting to send confirmation email to recipient...');
-    const emailBody = `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; border-radius: 10px 10px 0 0; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">Welcome to Our Waitlist!</h1>
-        </div>
-        
-        <div style="background-color: #ffffff; padding: 40px 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-          <p style="color: #333333; font-size: 18px; margin-bottom: 20px;">Dear ${fullname},</p>
-          
-          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            Thank you for your interest in <strong>Cyan Open University of Technology</strong>! We are thrilled to have you join our waitlist.
-          </p>
-          
-          <div style="background-color: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 30px 0; border-radius: 5px;">
-            <p style="color: #333333; font-size: 15px; margin: 0; line-height: 1.6;">
-              <strong>✓ Your submission has been received successfully!</strong><br>
-              We've added you to our exclusive waitlist and will keep you updated on our launch progress.
-            </p>
-          </div>
-          
-          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            As a waitlist member, you'll be among the first to know when we open our doors. We'll send you updates about:
-          </p>
-          
-          <ul style="color: #555555; font-size: 15px; line-height: 1.8; margin-bottom: 30px;">
-            <li>Early access opportunities</li>
-            <li>Special launch offers and benefits</li>
-            <li>Program details and course information</li>
-            <li>Important dates and milestones</li>
-          </ul>
-          
-          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-            We're working hard to create an exceptional learning experience, and we can't wait to share it with you.
-          </p>
-          
-          <div style="text-align: center; margin: 40px 0;">
-            <p style="color: #667eea; font-size: 18px; font-weight: 600; margin: 0;">
-              Stay tuned for exciting updates!
-            </p>
-          </div>
-          
-          <p style="color: #555555; font-size: 15px; line-height: 1.6; margin-bottom: 10px;">
-            Warm regards,<br>
-            <strong style="color: #667eea;">The Cyan Open University of Technology Team</strong>
-          </p>
-        </div>
-      </div>
-    `;
-    const mailOptions = {
-      from: process.env.SMTP_USER,
-      to: email,
-      subject: 'Welcome to Cyan Open University of Technology Waitlist! 🎓',
-      html: getEmailTemplate(emailBody),
-    };
-    await transporter.sendMail(mailOptions);
-    console.log('Confirmation email sent to recipient successfully.');
-
-    res.status(200).send('Waitlist submission successful and confirmation email sent!');
   } catch (error) {
     console.error('Error processing waitlist submission:', error);
     console.error('Error details:', {
